@@ -23,8 +23,6 @@ app.use(
 );
 
 mongoose.connect(process.env.CONNECTION_STRING, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
 });
 
 app.use(bodyParser.json());
