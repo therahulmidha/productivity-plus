@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkproductivity_plus"]=self["webpackChunkproductivity_plus"]||[]).push([[114],{8114:function(u,t,n){n.r(t),n.d(t,{default:function(){return d}});var r=n(3396);const c={class:"about"},i=(0,r._)("h1",null,"Rahul Midha",-1),s=[i];function a(u,t){return(0,r.wg)(),(0,r.iD)("div",c,s)}var e=n(89);const l={},o=(0,e.Z)(l,[["render",a]]);var d=o}}]);
+//# sourceMappingURL=114.ab7ec726.js.map
