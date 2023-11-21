@@ -4,7 +4,6 @@
     <h1>Productivity Tools</h1>
     <div class="options"><font-awesome-icon icon="fa-solid fa-bars" /></div>
   </div>
-  <hr />
 </template>
 
 <style scoped>

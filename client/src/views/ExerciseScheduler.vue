@@ -26,9 +26,7 @@
         {{ started ? "Stop" : "Start" }}
       </button>
     </div>
-    <div
-      class="scheduler d-flex flex-wrap justify-content-evenly"
-    >
+    <div class="scheduler d-flex flex-wrap justify-content-evenly">
       <div class="col-md-4 mx-2 d-inline-block my-5">
         <div class="d-flex justify-content-between">
           <h3>Exercises</h3>
@@ -309,7 +307,13 @@ export default {
 }
 @media (min-width: 320px) and (max-width: 480px) {
   .exercise-start-info {
-    font-size: 40px;
+    font-size: 30px;
+  }
+  .exercise-name {
+    font-size: 35px;
+  }
+  .exercise-duration {
+    font-size: 30px;
   }
 }
 </style>
