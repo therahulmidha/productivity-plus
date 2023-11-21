@@ -1,27 +1,32 @@
 <template>
-  <div class="planner-header">
-    <h1>Week Planner</h1>
-    <div style="color: black" class="my-auto" v-if="info">
-      {{ info }}
+  <div>
+    <div class="planner-header">
+      <h1>Week Planner</h1>
+      <div style="color: black" class="my-auto" v-if="info">
+        {{ info }}
+      </div>
+      <div style="color: red" class="my-auto" v-if="error">
+        {{ error }}
+      </div>
+      <Button text="Save" @click="savePlanner()"> </Button>
     </div>
-    <div style="color: red" class="my-auto" v-if="error">
-      {{ error }}
-    </div>
-    <Button text="Save" @click="savePlanner()"> </Button>
-  </div>
-  <div class="week-planner">
-    <div :key="day.id" v-for="day in weekData">
-      <div class="day-container">
-        <div
-          class="day"
-          :style="{
-            backgroundColor: day.color,
-            border: day.id === weekData.find(w => w.name === today).id ? `5px solid lightgrey` : ``,
-          }"
-        >
-          {{ day.name }}
+    <div class="week-planner">
+      <div :key="day.id" v-for="day in weekData">
+        <div class="day-container">
+          <div
+            class="day"
+            :style="{
+              backgroundColor: day.color,
+              border:
+                day.id === weekData.find((w) => w.name === today).id
+                  ? `5px solid lightgrey`
+                  : ``,
+            }"
+          >
+            {{ day.name }}
+          </div>
+          <textarea rows="5" v-model="day.text" />
         </div>
-        <textarea rows="5" v-model="day.text" />
       </div>
     </div>
   </div>
@@ -149,11 +154,10 @@ textarea {
     justify-content: center;
   }
   .day {
-    width: 20%;
-    margin: 2px;
+    width: 30%;
     height: 50%;
     color: #fff;
-    font-weight: bolder;
+    font-size: small;
   }
 
   textarea {

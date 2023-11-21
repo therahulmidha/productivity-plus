@@ -1,81 +1,85 @@
 <template>
-  <ExerciseAddEditModal
-    v-if="modalAction"
-    :action="modalAction"
-    :data="currentExerciseData"
-    @save-exercise="saveExercise"
-    @close="closeModal"
-  />
-  <ExerciseDeleteModal
-    v-if="deletionId"
-    :deletionId="deletionId"
-    @confirm-delete="confirmDeletion"
-  />
-  <div class="d-flex justify-content-between">
-    <h1 class="my-auto">Exercise Scheduler</h1>
-    <div class="my-auto" style="color: black" v-if="info">
-      {{ info }}
+  <div>
+    <ExerciseAddEditModal
+      v-if="modalAction"
+      :action="modalAction"
+      :data="currentExerciseData"
+      @save-exercise="saveExercise"
+      @close="closeModal"
+    />
+    <ExerciseDeleteModal
+      v-if="deletionId"
+      :deletionId="deletionId"
+      @confirm-delete="confirmDeletion"
+    />
+    <div class="d-flex justify-content-between">
+      <h1 class="my-auto">Exercise Scheduler</h1>
+      <div class="my-auto" style="color: black" v-if="info">
+        {{ info }}
+      </div>
+      <div class="my-auto" style="color: red" v-if="error">{{ error }}</div>
+      <button
+        class="btn btn-success my-auto"
+        @click="toggleStart()"
+        :disabled="!exercises.length"
+      >
+        {{ started ? "Stop" : "Start" }}
+      </button>
     </div>
-    <div class="my-auto" style="color: red" v-if="error">{{ error }}</div>
-    <button
-      class="btn btn-success my-auto"
-      @click="toggleStart()"
-      :disabled="!exercises.length"
+    <div
+      class="scheduler d-flex flex-wrap justify-content-evenly"
     >
-      {{ started ? "Stop" : "Start" }}
-    </button>
-  </div>
-  <div class="scheduler d-flex justify-content-evenly">
-    <div class="col-md-4 mx-2 h-100 d-inline-block my-5">
-      <div class="d-flex justify-content-between">
-        <h3>Exercises</h3>
+      <div class="col-md-4 mx-2 d-inline-block my-5">
+        <div class="d-flex justify-content-between">
+          <h3>Exercises</h3>
 
-        <button
-          type="button"
-          @click="openModal('Add')"
-          class="btn btn-primary my-auto"
-          :disabled="started"
-        >
-          Add
-        </button>
+          <button
+            type="button"
+            @click="openModal('Add')"
+            class="btn btn-primary my-auto"
+            :disabled="started"
+          >
+            Add
+          </button>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Duration</th>
+              <th scope="col">Break</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody :key="ex.id" v-for="ex in exercises">
+            <tr class="exercise-container">
+              <td>{{ ex.name }}</td>
+              <td>{{ ex.duration }}</td>
+              <td>{{ ex.break }}</td>
+              <td @click="openModal('Edit', ex)">
+                <font-awesome-icon icon="fa-solid fa-edit" />
+              </td>
+              <td @click="openDeleteModal(ex.id)">
+                <font-awesome-icon icon="fa-solid fa-trash" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="!exercises.length">
+          <p class="text-center">No Exercises Added Yet!</p>
+        </div>
       </div>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Duration</th>
-            <th scope="col">Break</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody :key="ex.id" v-for="ex in exercises">
-          <tr class="exercise-container">
-            <td>{{ ex.name }}</td>
-            <td>{{ ex.duration }}</td>
-            <td>{{ ex.break }}</td>
-            <td @click="openModal('Edit', ex)">
-              <font-awesome-icon icon="fa-solid fa-edit" />
-            </td>
-            <td @click="openDeleteModal(ex.id)">
-              <font-awesome-icon icon="fa-solid fa-trash" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div v-if="!exercises.length">
-        <p class="text-center">No Exercises Added Yet!</p>
-      </div>
-    </div>
-    <div class="col-md-6 mx-2">
-      <div v-if="!started" class="exercise-start-info">
-        {{ displayMessage }}
-      </div>
-      <div v-if="started" class="exercise-name">
-        {{ runningExerciseName }}
-      </div>
-      <div v-if="started" class="exercise-duration">
-        {{ runningExerciseDuration }}
+      <div class="col-md-6 mx-auto">
+        <div v-if="!started" class="exercise-start-info">
+          {{ displayMessage }}
+        </div>
+        <div v-if="started" class="exercise-name">
+          {{ runningExerciseName }}
+        </div>
+        <div v-if="started" class="exercise-duration">
+          {{ runningExerciseDuration }}
+        </div>
       </div>
     </div>
   </div>
@@ -99,7 +103,7 @@ export default {
       modalAction: "",
       currentExerciseData: {},
       deletionId: null,
-      displayMessage: "Add exercises to start a schedule!",
+      displayMessage: "",
       started: false,
       runningExerciseName: "",
       runningExerciseDuration: null,
@@ -118,6 +122,10 @@ export default {
       .then((response) => {
         if (response.data.length) {
           this.exercises = response.data;
+          this.displayMessage =
+            this.exercises.length === 0
+              ? "Add exercises to start a schedule!"
+              : "Click the start button to start the schedule.";
         }
       })
       .catch((error) => console.log(error));
@@ -147,7 +155,7 @@ export default {
     noOfExercises(newVal) {
       if (!newVal) {
         this.displayMessage = "Add exercises to start a schedule!";
-      } else {
+      } else if (newVal > 0) {
         this.displayMessage = "Click the start button to start the schedule.";
       }
     },
@@ -298,5 +306,10 @@ export default {
 }
 .exercise-duration {
   font-size: 80px;
+}
+@media (min-width: 320px) and (max-width: 480px) {
+  .exercise-start-info {
+    font-size: 40px;
+  }
 }
 </style>
