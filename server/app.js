@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 //   next();
 // });
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Welcome to Productivity-plus API Server");
 });
 app.use("/api/v1/auth", authRoutes);
