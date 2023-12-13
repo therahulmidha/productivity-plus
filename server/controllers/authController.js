@@ -33,10 +33,10 @@ const registerUser = asyncHandler(async (req, res) => {
       password: hashedPassword,
     });
     return res.status(201).json({
-      token: createUserToken(user, "1d"),
+      token: createUserToken(user, "1y"),
       email: email,
       userId: user._id,
-      refreshToken: createUserToken(user, "7d"),
+      refreshToken: createUserToken(user, "2y"),
       expiresIn: ONE_DAY,
     });
   } catch (error) {
@@ -58,10 +58,10 @@ const loginUser = asyncHandler(async (req, res) => {
     }
     if (user && (await bcrypt.compare(password, user.password))) {
       return res.status(200).json({
-        token: createUserToken(user, "1d"),
+        token: createUserToken(user, "1y"),
         email: email,
         userId: user._id,
-        refreshToken: createUserToken(user, "7d"),
+        refreshToken: createUserToken(user, "2y"),
         expiresIn: ONE_DAY,
       });
     } else {
