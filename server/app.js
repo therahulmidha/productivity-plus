@@ -8,6 +8,7 @@ const authRoutes = require("./routes/v1/authRoutes");
 const exerciseRoutes = require("./routes/v1/exerciseRoutes");
 const roughPadRoutes = require("./routes/v1/roughPadRoutes");
 const notificationRoutes = require("./routes/v1/notificationRoutes");
+const testRoutes = require("./routes/v1/testRoutes");
 const axios = require("axios");
 
 require("dotenv").config();
@@ -41,13 +42,13 @@ app.use("/api/v1/week-planner", weekDataRoutes);
 app.use("/api/v1/exercises", exerciseRoutes);
 app.use("/api/v1/rough-pad", roughPadRoutes);
 app.use("/api/v1/notification", notificationRoutes);
+app.use("/api/v1/test", testRoutes);
 
 // app.use((err, req, res, next) => {
 //   errorLogger.error(err.message);
 // });
 
-
-// Keep alive 
+// Keep alive
 setInterval(() => {
   axios
     .get("https://productivity-plus.onrender.com/")
