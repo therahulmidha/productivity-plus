@@ -56,7 +56,7 @@ router.get("/jira/callback", async function (req, res, next) {
     );
     console.log(accessibleResources);
 
-    res.json(accessibleResources);
+    res.json(data);
   } catch (error) {
     next(error);
   }
