@@ -62,4 +62,79 @@ router.get("/jira/callback", async function (req, res, next) {
   }
 });
 
+const employeeData = [
+  {
+    id: 1,
+    name: "John",
+    designation: "Manager",
+    nationality: "Indian",
+    city: "Delhi",
+  },
+  {
+    id: 2,
+    name: "Ryan",
+    designation: "Sales",
+    nationality: "Indian",
+    city: "Pune",
+  },
+  {
+    id: 3,
+    name: "Sam",
+    designation: "Developer",
+    nationality: "Indian",
+    city: "Pune",
+  },
+  {
+    id: 3,
+    name: "Sam",
+    designation: "Developer",
+    nationality: "American",
+    city: "NY",
+  },
+  {
+    id: 3,
+    name: "Sam",
+    designation: "Developer",
+    nationality: "American",
+    city: "CA",
+  },
+];
+const productData = [
+  {
+    id: 1,
+    name: "Lenovo Laptop",
+    price: 99,
+    discount: "20%",
+  },
+  {
+    id: 2,
+    name: "Dell Laptop",
+    price: 79,
+    discount: "10%",
+  },
+  {
+    id: 3,
+    name: "HP Laptop",
+    price: 89,
+    discount: "15%",
+  },
+];
+
+router.post("/data/:type", (req, res) => {
+  const { type } = req.params;
+  const { select } = req.query;
+  const { city, nationality } = req.body;
+  let data = type === "employee" ? employeeData : productData;
+  data = data
+    .filter((e) => e.city === city && e.nationality === nationality)
+    .map((e) => {
+      const response = {};
+      select.split(",").forEach((s) => {
+        response[s] = e[s];
+      });
+      return response;
+    });
+  res.json(data);
+});
+
 module.exports = router;
