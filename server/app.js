@@ -10,6 +10,7 @@ const roughPadRoutes = require("./routes/v1/roughPadRoutes");
 const notificationRoutes = require("./routes/v1/notificationRoutes");
 const testRoutes = require("./routes/v1/testRoutes");
 const axios = require("axios");
+const session = require("express-session");
 
 require("dotenv").config();
 
@@ -25,7 +26,14 @@ app.use(
 );
 
 mongoose.connect(process.env.CONNECTION_STRING, {});
-
+app.use(
+  session({
+    secret: process.env.ACCESS_TOKEN_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    // cookie: { secure: true }, TODO: enable for production HTTPS app
+  }),
+);
 app.use(bodyParser.json());
 
 // app.use((req, res, next) => {

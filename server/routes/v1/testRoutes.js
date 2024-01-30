@@ -26,6 +26,8 @@ router.get("/jira", async function (req, res, next) {
       )}` +
       `&response_type=code` +
       `&prompt=consent`;
+    req.session.authorization = "TEST_VALUE";
+
     res.redirect(authorizeUrl);
   } catch (error) {
     next(error);
@@ -35,6 +37,7 @@ router.get("/jira", async function (req, res, next) {
 router.get("/jira/callback", async function (req, res, next) {
   try {
     const { code } = req.query;
+    req.session.destroy();
     const { data } = await axios.post(
       `https://auth.atlassian.com/oauth/token`,
       {
