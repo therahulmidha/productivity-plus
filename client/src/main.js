@@ -10,12 +10,13 @@ import {
   faClock,
   faEdit,
   faTrash,
+  faPlay,
 } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap"
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-library.add([faClock, faBars, faCheck, faTrash, faEdit]);
+library.add([faClock, faBars, faCheck, faTrash, faEdit, faPlay]);
 
 createApp(App)
   .use(router)

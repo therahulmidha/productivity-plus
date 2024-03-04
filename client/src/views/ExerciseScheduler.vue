@@ -48,13 +48,17 @@
               <th scope="col">Break</th>
               <th scope="col"></th>
               <th scope="col"></th>
+              <th scope="col"></th>
             </tr>
           </thead>
-          <tbody :key="ex.id" v-for="ex in exercises">
+          <tbody :key="ex.id" v-for="(ex, index) in exercises">
             <tr class="exercise-container">
               <td>{{ ex.name }}</td>
               <td>{{ ex.duration }}</td>
               <td>{{ ex.break }}</td>
+              <td @click="startingIndex = index; toggleStart()">
+                <font-awesome-icon icon="fa-solid fa-play" />
+              </td>
               <td @click="openModal('Edit', ex)">
                 <font-awesome-icon icon="fa-solid fa-edit" />
               </td>
@@ -68,7 +72,7 @@
           <p class="text-center">No Exercises Added Yet!</p>
         </div>
       </div>
-      <div class="col-md-6 mx-auto">
+      <div class="col-md-6 mx-auto p-5">
         <div v-if="!started" class="exercise-start-info">
           {{ displayMessage }}
         </div>
@@ -112,6 +116,7 @@ export default {
         break: new Audio(require(`@/assets/audio/break_bell.mp3`)),
         startExercise: new Audio(require(`@/assets/audio/start_exercise.wav`)),
       },
+      startingIndex: 0,
     };
   },
   mounted() {
@@ -140,6 +145,9 @@ export default {
           this.runningExerciseDuration = null;
           this.runningTimeInSeconds = null;
           this.displayMessage = "Well Done!";
+          clearTimeout(this.exerciseTimeout);
+          this.exerciseTimeout = null;
+          this.startingIndex = 0;
         }
       } else {
         this.exerciseTimeout = setTimeout(() => {
@@ -191,7 +199,7 @@ export default {
     toggleStart() {
       this.started = !this.started;
       if (this.started) {
-        this.exercises.forEach((ex) => {
+        this.exercises.slice(this.startingIndex).forEach((ex) => {
           this.exerciseQueue.push({
             name: ex.name,
             duration: ex.duration,
