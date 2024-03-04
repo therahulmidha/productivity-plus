@@ -43,3 +43,9 @@ npm run serve
 ```
 npm start
 ```
+
+## Deploying client to gh-pages
+1. cd .. // root
+2. npm run build
+3. git add dist && git commit -m 'adding dist subtree'
+4. git subtree push --prefix client/dist origin gh-pages
