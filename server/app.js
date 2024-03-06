@@ -20,7 +20,7 @@ const app = express();
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (Array.from(process.env.ALLOWED_ORIGINS).indexOf(origin) !== -1) {
+      if (process.env.ALLOWED_ORIGINS.split(',').indexOf(origin) !== -1) {
         callback(null, true)
       } else {
         callback(new Error('Not allowed by CORS'))
