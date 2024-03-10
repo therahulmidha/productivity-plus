@@ -30,7 +30,7 @@
       <div class="col-md-4 mx-2 d-inline-block my-5">
         <div class="d-flex justify-content-between">
           <h3>Exercises</h3>
-
+          <h3>{{ totalDuration }}</h3>
           <button
             type="button"
             @click="openModal('Add')"
@@ -56,7 +56,12 @@
               <td>{{ ex.name }}</td>
               <td>{{ ex.duration }}</td>
               <td>{{ ex.break }}</td>
-              <td @click="startingIndex = index; toggleStart()">
+              <td
+                @click="
+                  startingIndex = index;
+                  toggleStart();
+                "
+              >
                 <font-awesome-icon icon="fa-solid fa-play" />
               </td>
               <td @click="openModal('Edit', ex)">
@@ -117,6 +122,7 @@ export default {
         startExercise: new Audio(require(`@/assets/audio/start_exercise.wav`)),
       },
       startingIndex: 0,
+      totalDuration: 0,
     };
   },
   mounted() {
@@ -129,6 +135,18 @@ export default {
             this.exercises.length === 0
               ? "Add exercises to start a schedule!"
               : "Click the start button to start the schedule.";
+          try {
+            this.totalDuration = this.convertSecondsToStringTime(
+              response.data
+                .map(
+                  (row) =>
+                    this.convertStringTimeToSeconds(row.duration) + row.break
+                )
+                .reduce((a, b) => a + b)
+            );
+          } catch (error) {
+            this.totalDuration = "NA";
+          }
         }
       })
       .catch((error) => console.log(error));
@@ -181,6 +199,10 @@ export default {
     },
     getDoubleDigitString(value) {
       return value < 10 ? "0" + value : value;
+    },
+    convertStringTimeToSeconds(str) {
+      const arr = str.split(":");
+      return +arr[0] * 60 + +arr[1];
     },
     prepareNextExerciseData() {
       const runningExercise = this.exerciseQueue[0];
